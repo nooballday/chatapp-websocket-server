@@ -10,9 +10,11 @@ const wsIo = ws().instance
  * catch connection(s)
  */
 wsIo.on('connection', (socket) => {
-    socket.on('join', function (room) {
-        socket.to(room).emit('message', `${socket.id.substr(0, 4)} joined the room`)
-        console.log(socket.id)
+    console.log(`${socket.id} is joining the room!`)
+    socket.on('chat', function (data) {
+        const payload = JSON.parse(data)
+        console.log(`${payload.user_id} is sending ${payload.message}`)
+        socket.broadcast.emit('chat', payload)
     })
     /**
     * listen disconnect(s)
